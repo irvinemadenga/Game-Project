@@ -1,0 +1,32 @@
+import pygame
+import gamebox
+camera = gamebox.Camera(700, 500)
+character_move= gamebox.load_sprite_sheet("gamecharachter.png",1,4)
+character = gamebox.from_image(100,400,character_move[0])
+scenery = gamebox.from_image(350,250,"background.png")
+current_frame = 0
+character.scale_by(3)
+def move_man(keys):
+ global current_frame
+ global  character
+ walker_move = False
+ if pygame.K_LEFT in keys:
+     character.x -= 10
+     walker_move = True
+ if pygame.K_RIGHT in keys:
+     character.x += 10
+     walker_move = True
+ if walker_move:
+    current_frame += 0.3
+    if current_frame >= 4:
+        current_frame = 0
+    character.image = character_move[int(current_frame)]
+ else:
+    character.image = character_move[0]
+
+def tick(keys):
+    move_man(keys)
+    camera.draw(scenery)
+    camera.draw(character)
+    camera.display()
+gamebox.timer_loop(30,tick)
